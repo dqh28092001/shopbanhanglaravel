@@ -14,14 +14,27 @@ session_start();
 
 class AdminController extends Controller
 {
+// ngăn chặn người dùng chưa đăng nhập mà vô được bên trong 
+    public function AuthLogin(){
+        $admin_id = Session::get('admin_id');
+        if($admin_id){
+            return Redirect::to('dashboard');
+        }else{
+            return Redirect::to('admin_login')->send();
+
+        }
+    }
     public function index()
     {
         return view('Admin.admin_login');
     }
     public function show_dashboard()
     {
+        $this->AuthLogin();
         return view('Admin.dashboard');
     }
+
+    // trang đăng nhập
     public function dashboard(Request $request)
     {
         $admin_email = $request->admin_email;
@@ -41,6 +54,7 @@ class AdminController extends Controller
 
     public function logout()
     {
+        $this->AuthLogin();
         Session::put('admin_name',null);
         Session::put('admin_id',null);
         return Redirect::to('/admin_login');
