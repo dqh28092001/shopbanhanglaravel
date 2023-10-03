@@ -57,7 +57,7 @@ class CategoryProduct extends Controller
     {
         $this->AuthLogin();
         DB::table('tbl_category_product')->where('category_id', $category_product_id)->update(['category_status' => 1]);
-        Session::put('message', 'Không Kích Hoạt Danh Mục Sản Phẩm Thành Công');
+        Session::put('message', 'Ẩn Danh Mục Sản Phẩm Thành Công');
         return Redirect::to('/all_category_product');
     }
     
@@ -65,7 +65,7 @@ class CategoryProduct extends Controller
     {
         $this->AuthLogin();
         DB::table('tbl_category_product')->where('category_id', $category_product_id)->update(['category_status' => 0]);
-        Session::put('message', ' Kích Hoạt Danh Mục Sản Phẩm Thành Công');
+        Session::put('message', ' Hiển Thị Danh Mục Sản Phẩm Thành Công');
         return Redirect::to('/all_category_product');
     }
 
@@ -100,4 +100,22 @@ class CategoryProduct extends Controller
         return Redirect::to('/all_category_product');
     }
     
+    // End Function Admin  Page
+
+    // láy sản phẩm ra theo id của danh mục 
+    public function show_category_home($category_id){
+
+        $cate_product = DB::table('tbl_category_product')->where('category_status','0')->orderBy('category_id', 'desc')->get();
+        $brand_product = DB::table('tbl_brand_product')->where('brand_status','0')->orderBy('brand_id', 'desc')->get();
+
+        $category_by_id = DB::table('tbl_product')
+        ->join('tbl_category_product','tbl_product.category_id','=','tbl_category_product.category_id')
+        ->where('tbl_product.category_id',$category_id)->get();
+
+        $category_name = DB::table('tbl_category_product')->where('tbl_category_product.category_id',$category_id)->limit(1)->get();
+        return view('pages.category.show_category')->with('category',$cate_product)
+        ->with('brand',$brand_product)->with('category_by_id',$category_by_id)->with('category_name',$category_name);
+    }
+
+
 }

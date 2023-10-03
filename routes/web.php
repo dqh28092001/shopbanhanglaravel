@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BrandProduct;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryProduct;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginAndRegisterController;
@@ -21,7 +22,12 @@ use Illuminate\Support\Facades\Route;
 
 // FE
 Route::get('/', [HomeController::class,'index']); 
-Route::get('/home', [HomeController::class,'index']); 
+Route::get('/home', [HomeController::class,'index']);   
+
+// Danh mục sản phẩm trang chủ
+Route::get('/danh_muc_san_pham/{category_id}', [CategoryProduct::class,'show_category_home']); 
+Route::get('/thuong_hieu_san_pham/{brand_id}', [BrandProduct::class,'show_brand_home']); 
+Route::get('/detail_product/{product_id}', [ProductController::class,'detail_product']); 
 
 // BE
 Route::get('/admin_login', [AdminController::class,'index']); 
@@ -68,3 +74,7 @@ Route::get('/active_product/{product_id}', [ProductController::class,'active_pro
 
 Route::post('/save_product', [ProductController::class,'save_product']); 
 Route::post('/update_product/{product_id}', [ProductController::class,'update_product']); 
+
+
+// add to cart
+Route::post('/save_cart', [CartController::class,'save_cart']); 
